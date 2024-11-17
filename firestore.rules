@@ -1,0 +1,31 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Vérifie si l'utilisateur est authentifié
+    function isAuth() {
+      return request.auth != null;
+    }
+
+    // Vérifie si l'email est vérifié
+    function isEmailVerified() {
+      return request.auth.token.email_verified;
+    }
+
+    // Vérifie si l'utilisateur est propriétaire du document
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+
+    // Règles pour tous les documents
+    match /{document=**} {
+      allow read: if isAuth() && isEmailVerified();
+      allow write: if isAuth() && isEmailVerified();
+    }
+
+    // Règles spécifiques pour la collection users
+    match /users/{userId} {
+      allow read: if isAuth();
+      allow write: if isAuth() && isOwner(userId);
+    }
+  }
+}

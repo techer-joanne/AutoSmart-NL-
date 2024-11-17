@@ -1,0 +1,26 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Vérifie si l'utilisateur est authentifié
+    function isAuth() {
+      return request.auth != null;
+    }
+
+    // Vérifie si l'email est vérifié
+    function isEmailVerified() {
+      return request.auth.token.email_verified;
+    }
+
+    // Règles pour tous les fichiers
+    match /{allPaths=**} {
+      allow read: if isAuth() && isEmailVerified();
+      allow write: if isAuth() && isEmailVerified();
+    }
+
+    // Règles pour les avatars des utilisateurs
+    match /users/{userId}/avatar.{extension} {
+      allow read: if isAuth();
+      allow write: if isAuth() && request.auth.uid == userId;
+    }
+  }
+}
