@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { FileSpreadsheet, Send, Bot, Loader } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import DashboardLayout from '../components/DashboardLayout';
@@ -14,6 +14,15 @@ export default function AnalyticsToolPage() {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [showHeader, setShowHeader] = useState(true);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   useEffect(() => {
     if (messages.length > 1) {
@@ -76,11 +85,11 @@ export default function AnalyticsToolPage() {
               marginTop: showHeader ? '1rem' : '0'
             }}
             transition={{ duration: 0.5, ease: 'easeInOut' }}
-            className="px-4 sm:px-6 lg:px-8 min-h-0 flex flex-col"
+            className="px-4 sm:px-6 lg:px-8 min-h-0 flex flex-col overflow-hidden"
           >
-            <div className="flex-1 backdrop-blur-xl bg-white/30 dark:bg-gray-800/30 rounded-2xl shadow-2xl border border-white/10 flex flex-col">
+            <div className="flex-1 backdrop-blur-xl bg-white/30 dark:bg-gray-800/30 rounded-2xl shadow-2xl border border-white/10 flex flex-col overflow-hidden">
               {/* Messages Container */}
-              <div className="flex-1 p-4 sm:p-6 overflow-y-auto no-scrollbar">
+              <div className="flex-1 p-4 sm:p-6 overflow-y-auto custom-scrollbar">
                 <div className="space-y-4">
                   <AnimatePresence mode="popLayout">
                     {messages.map((message, index) => (
@@ -138,6 +147,7 @@ export default function AnalyticsToolPage() {
                       </div>
                     </motion.div>
                   )}
+                  <div ref={messagesEndRef} />
                 </div>
               </div>
 
