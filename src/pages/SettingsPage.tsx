@@ -1,17 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { 
-  User, 
-  Bell, 
-  Globe, 
-  Moon, 
-  Palette,
-  Mail,
-  Key,
-  Shield,
-  Trash2,
-  AlertTriangle,
-  ChevronRight
+  Settings, User, Globe, Bell, Lock, Moon, Sun, 
+  Mail, Phone, Building, ChevronRight, Shield,
+  Palette, Volume2, Eye, Monitor
 } from 'lucide-react';
 import DashboardLayout from '../components/DashboardLayout';
 import { useTheme } from '../contexts/ThemeContext';
@@ -20,10 +12,22 @@ import { useAuth } from '../contexts/AuthContext';
 export default function SettingsPage() {
   const { theme, toggleTheme } = useTheme();
   const { currentUser } = useAuth();
+  const [notifications, setNotifications] = useState({
+    email: true,
+    push: true,
+    updates: false,
+    marketing: false
+  });
+
+  const [appearance, setAppearance] = useState({
+    animations: true,
+    sounds: true,
+    highContrast: false
+  });
 
   return (
     <DashboardLayout>
-      <div className="py-8">
+      <div className="py-8 bg-gray-50 dark:bg-gray-900">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -35,55 +39,62 @@ export default function SettingsPage() {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Profil */}
-          <motion.section
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6"
+            className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm"
           >
             <div className="flex items-center space-x-3 mb-6">
               <User className="h-6 w-6 text-indigo-500" />
               <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Profil</h2>
             </div>
 
-            <div className="space-y-6">
+            <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                   Email
                 </label>
                 <input
                   type="email"
                   value={currentUser?.email || ''}
                   readOnly
-                  className="w-full px-3 py-2 bg-gray-100 dark:bg-gray-700 rounded-lg text-gray-900 dark:text-white"
+                  className="w-full px-3 py-2 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-900 dark:text-white"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Nom d'affichage
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Nom complet
                 </label>
                 <input
                   type="text"
                   placeholder="Votre nom"
-                  className="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-3 py-2 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-900 dark:text-white"
                 />
               </div>
 
-              <button className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors">
-                Sauvegarder les modifications
-              </button>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Entreprise
+                </label>
+                <input
+                  type="text"
+                  placeholder="Nom de l'entreprise"
+                  className="w-full px-3 py-2 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-900 dark:text-white"
+                />
+              </div>
             </div>
-          </motion.section>
+          </motion.div>
 
           {/* Notifications */}
-          <motion.section
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6"
+            className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm"
           >
             <div className="flex items-center space-x-3 mb-6">
               <Bell className="h-6 w-6 text-indigo-500" />
@@ -94,33 +105,49 @@ export default function SettingsPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-900 dark:text-white">Notifications email</p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">Recevoir des mises à jour par email</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">Recevoir les mises à jour par email</p>
                 </div>
-                <label className="relative inline-flex items-center cursor-pointer">
-                  <input type="checkbox" className="sr-only peer" defaultChecked />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-300 dark:peer-focus:ring-indigo-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-indigo-600"></div>
-                </label>
+                <button
+                  onClick={() => setNotifications(prev => ({ ...prev, email: !prev.email }))}
+                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                    notifications.email ? 'bg-indigo-600' : 'bg-gray-200 dark:bg-gray-700'
+                  }`}
+                >
+                  <span
+                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                      notifications.email ? 'translate-x-6' : 'translate-x-1'
+                    }`}
+                  />
+                </button>
               </div>
 
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-900 dark:text-white">Notifications push</p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">Recevoir des notifications dans le navigateur</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">Recevoir les alertes en temps réel</p>
                 </div>
-                <label className="relative inline-flex items-center cursor-pointer">
-                  <input type="checkbox" className="sr-only peer" />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-300 dark:peer-focus:ring-indigo-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-indigo-600"></div>
-                </label>
+                <button
+                  onClick={() => setNotifications(prev => ({ ...prev, push: !prev.push }))}
+                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                    notifications.push ? 'bg-indigo-600' : 'bg-gray-200 dark:bg-gray-700'
+                  }`}
+                >
+                  <span
+                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                      notifications.push ? 'translate-x-6' : 'translate-x-1'
+                    }`}
+                  />
+                </button>
               </div>
             </div>
-          </motion.section>
+          </motion.div>
 
           {/* Apparence */}
-          <motion.section
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6"
+            className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm"
           >
             <div className="flex items-center space-x-3 mb-6">
               <Palette className="h-6 w-6 text-indigo-500" />
@@ -130,85 +157,97 @@ export default function SettingsPage() {
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-900 dark:text-white">Mode sombre</p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">Basculer entre le mode clair et sombre</p>
+                  <p className="text-sm font-medium text-gray-900 dark:text-white">Thème sombre</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">Activer le mode sombre</p>
                 </div>
                 <button
                   onClick={toggleTheme}
-                  className="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
                 >
-                  {theme === 'dark' ? <Moon className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+                  {theme === 'dark' ? (
+                    <Sun className="h-5 w-5 text-gray-500 dark:text-gray-400" />
+                  ) : (
+                    <Moon className="h-5 w-5 text-gray-500 dark:text-gray-400" />
+                  )}
                 </button>
               </div>
 
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-900 dark:text-white">Langue</p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">Choisir la langue de l'interface</p>
+                  <p className="text-sm font-medium text-gray-900 dark:text-white">Animations</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">Activer les animations de l'interface</p>
                 </div>
-                <select className="px-3 py-2 bg-gray-100 dark:bg-gray-700 rounded-lg text-gray-900 dark:text-white">
-                  <option value="fr">Français</option>
-                  <option value="en">English</option>
-                </select>
+                <button
+                  onClick={() => setAppearance(prev => ({ ...prev, animations: !prev.animations }))}
+                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                    appearance.animations ? 'bg-indigo-600' : 'bg-gray-200 dark:bg-gray-700'
+                  }`}
+                >
+                  <span
+                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                      appearance.animations ? 'translate-x-6' : 'translate-x-1'
+                    }`}
+                  />
+                </button>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-900 dark:text-white">Sons</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">Activer les effets sonores</p>
+                </div>
+                <button
+                  onClick={() => setAppearance(prev => ({ ...prev, sounds: !prev.sounds }))}
+                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                    appearance.sounds ? 'bg-indigo-600' : 'bg-gray-200 dark:bg-gray-700'
+                  }`}
+                >
+                  <span
+                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                      appearance.sounds ? 'translate-x-6' : 'translate-x-1'
+                    }`}
+                  />
+                </button>
               </div>
             </div>
-          </motion.section>
+          </motion.div>
 
           {/* Sécurité */}
-          <motion.section
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6"
+            className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm"
           >
             <div className="flex items-center space-x-3 mb-6">
               <Shield className="h-6 w-6 text-indigo-500" />
               <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Sécurité</h2>
             </div>
 
-            <div className="space-y-6">
-              <div>
-                <button className="w-full flex items-center justify-between px-4 py-2 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
-                  <div className="flex items-center space-x-3">
-                    <Key className="h-5 w-5 text-indigo-500" />
-                    <span className="text-gray-900 dark:text-white">Changer le mot de passe</span>
-                  </div>
-                  <ChevronRight className="h-5 w-5 text-gray-400" />
-                </button>
-
-                <button className="w-full flex items-center justify-between px-4 py-2 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors mt-4">
-                  <div className="flex items-center space-x-3">
-                    <Shield className="h-5 w-5 text-indigo-500" />
-                    <span className="text-gray-900 dark:text-white">Authentification à deux facteurs</span>
-                  </div>
-                  <ChevronRight className="h-5 w-5 text-gray-400" />
-                </button>
-              </div>
-            </div>
-          </motion.section>
-
-          {/* Danger Zone */}
-          <motion.section
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-            className="bg-red-50 dark:bg-red-900/20 rounded-lg p-6"
-          >
-            <div className="flex items-center space-x-3 mb-6">
-              <AlertTriangle className="h-6 w-6 text-red-600 dark:text-red-400" />
-              <h2 className="text-xl font-semibold text-red-600 dark:text-red-400">Zone de danger</h2>
-            </div>
-
             <div className="space-y-4">
-              <button className="w-full flex items-center justify-between px-4 py-2 bg-red-100 dark:bg-red-900/40 rounded-lg hover:bg-red-200 dark:hover:bg-red-900/60 transition-colors">
+              <button className="w-full flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
                 <div className="flex items-center space-x-3">
-                  <Trash2 className="h-5 w-5 text-red-600 dark:text-red-400" />
-                  <span className="text-red-600 dark:text-red-400">Supprimer le compte</span>
+                  <Lock className="h-5 w-5 text-indigo-500" />
+                  <div className="text-left">
+                    <p className="text-sm font-medium text-gray-900 dark:text-white">Mot de passe</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">Modifier votre mot de passe</p>
+                  </div>
                 </div>
-                <ChevronRight className="h-5 w-5 text-red-400" />
+                <ChevronRight className="h-5 w-5 text-gray-400" />
+              </button>
+
+              <button className="w-full flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                <div className="flex items-center space-x-3">
+                  <Shield className="h-5 w-5 text-indigo-500" />
+                  <div className="text-left">
+                    <p className="text-sm font-medium text-gray-900 dark:text-white">Double authentification</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">Sécuriser votre compte</p>
+                  </div>
+                </div>
+                <ChevronRight className="h-5 w-5 text-gray-400" />
               </button>
             </div>
-          </motion.section>
+          </motion.div>
         </div>
       </div>
     </DashboardLayout>

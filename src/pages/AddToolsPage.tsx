@@ -1,12 +1,12 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Globe, Workflow, Database, Code, Puzzle, Library, Boxes, Wand2 } from 'lucide-react';
+import { Plus, Globe, Database, Boxes, Wand2, Library, Puzzle } from 'lucide-react';
 import DashboardLayout from '../components/DashboardLayout';
 
 export default function AddToolsPage() {
   return (
     <DashboardLayout>
-      <div className="py-8">
+      <div className="py-8 bg-gray-50 dark:bg-gray-900">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -18,102 +18,113 @@ export default function AddToolsPage() {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Section Intégration Site Web */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg metallic-effect"
+            className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg"
           >
             <Globe className="h-8 w-8 text-indigo-500 mb-4" />
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Intégrer mon site web</h3>
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Site Web</h3>
             <p className="text-gray-600 dark:text-gray-300 mb-4">
-              Connectez votre site web pour automatiser la collecte de données et l'analyse
+              Connectez votre site web pour automatiser les interactions utilisateurs
             </p>
-            <button className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors duration-200">
-              Commencer l'intégration
+            <button className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
+              Connecter
             </button>
           </motion.div>
 
-          {/* Section Flux Personnalisé */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg metallic-effect"
-          >
-            <Workflow className="h-8 w-8 text-indigo-500 mb-4" />
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Créer un flux personnalisé</h3>
-            <p className="text-gray-600 dark:text-gray-300 mb-4">
-              Construisez des workflows automatisés adaptés à vos besoins spécifiques
-            </p>
-            <button className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors duration-200">
-              Créer un flux
-            </button>
-          </motion.div>
-
-          {/* Section Connecter Base de Données */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg metallic-effect"
+            className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg"
           >
             <Database className="h-8 w-8 text-indigo-500 mb-4" />
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Connecter une base de données</h3>
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Base de données</h3>
             <p className="text-gray-600 dark:text-gray-300 mb-4">
-              Intégrez vos sources de données existantes pour une analyse centralisée
+              Intégrez vos données pour une analyse automatisée
             </p>
-            <button className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors duration-200">
-              Ajouter une source
-            </button>
-          </motion.div>
-
-          {/* Section API Personnalisée */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-            className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg metallic-effect"
-          >
-            <Code className="h-8 w-8 text-indigo-500 mb-4" />
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Créer une API personnalisée</h3>
-            <p className="text-gray-600 dark:text-gray-300 mb-4">
-              Développez des points d'accès API spécifiques à vos besoins
-            </p>
-            <button className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors duration-200">
-              Configurer l'API
+            <button className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
+              Configurer
             </button>
           </motion.div>
         </div>
 
-        {/* Section Bibliothèque d'Extensions */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
+          transition={{ delay: 0.3 }}
           className="mt-8"
         >
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Bibliothèque d'extensions</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg metallic-effect">
-              <Library className="h-8 w-8 text-indigo-500 mb-4" />
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Extensions populaires</h3>
-              <p className="text-gray-600 dark:text-gray-300">Découvrez les outils les plus utilisés par la communauté</p>
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Bibliothèque d'extensions</h2>
+              <p className="text-gray-600 dark:text-gray-300">
+                Découvrez nos extensions populaires
+              </p>
             </div>
+            <button className="flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
+              <Plus className="h-5 w-5 mr-2" />
+              Nouvelle Extension
+            </button>
+          </div>
 
-            <div className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg metallic-effect">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.4 }}
+              className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg"
+            >
               <Boxes className="h-8 w-8 text-indigo-500 mb-4" />
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Intégrations prêtes à l'emploi</h3>
-              <p className="text-gray-600 dark:text-gray-300">Solutions préconfigurées pour des cas d'usage courants</p>
-            </div>
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                Marketplace
+              </h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-4">
+                Explorez plus de 50 outils prêts à l'emploi
+              </p>
+              <button className="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                Explorer
+              </button>
+            </motion.div>
 
-            <div className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg metallic-effect">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.5 }}
+              className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg"
+            >
               <Wand2 className="h-8 w-8 text-indigo-500 mb-4" />
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Assistant de création</h3>
-              <p className="text-gray-600 dark:text-gray-300">Créez des outils personnalisés guidés par l'IA</p>
-            </div>
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                Personnalisation
+              </h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-4">
+                Créez vos propres outils avec notre assistant IA
+              </p>
+              <button className="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                Créer
+              </button>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.6 }}
+              className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg"
+            >
+              <Library className="h-8 w-8 text-indigo-500 mb-4" />
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                Templates
+              </h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-4">
+                Utilisez nos modèles pré-configurés
+              </p>
+              <button className="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                Parcourir
+              </button>
+            </motion.div>
           </div>
         </motion.div>
       </div>

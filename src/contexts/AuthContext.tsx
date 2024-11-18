@@ -6,7 +6,9 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
-  onAuthStateChanged
+  onAuthStateChanged,
+  sendEmailVerification,
+  sendPasswordResetEmail
 } from 'firebase/auth';
 import { auth } from '../config/firebase';
 
@@ -15,11 +17,21 @@ interface AuthContextType {
   signup: (email: string, password: string) => Promise<UserCredential>;
   login: (email: string, password: string) => Promise<UserCredential>;
   logout: () => Promise<void>;
+  resetPassword: (email: string) => Promise<void>;
+  sendVerificationEmail: () => Promise<void>;
   error: string | null;
   clearError: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+export function useAuth() {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+}
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
@@ -36,14 +48,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signup = async (email: string, password: string) => {
     try {
       const result = await createUserWithEmailAndPassword(auth, email, password);
+      await sendEmailVerification(result.user);
       return result;
     } catch (err: any) {
       console.error('Signup Error:', err);
-      if (err.code === 'auth/email-already-in-use') {
-        setError('Cette adresse email est déjà utilisée. Veuillez vous connecter.');
-      } else {
-        setError(getErrorMessage(err));
-      }
+      setError(getErrorMessage(err));
       throw err;
     }
   };
@@ -69,6 +78,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const resetPassword = async (email: string) => {
+    try {
+      await sendPasswordResetEmail(auth, email);
+    } catch (err: any) {
+      console.error('Reset Password Error:', err);
+      setError(getErrorMessage(err));
+      throw err;
+    }
+  };
+
+  const sendVerificationEmail = async () => {
+    try {
+      if (currentUser) {
+        await sendEmailVerification(currentUser);
+      }
+    } catch (err: any) {
+      console.error('Send Verification Email Error:', err);
+      setError(getErrorMessage(err));
+      throw err;
+    }
+  };
+
   const clearError = () => {
     setError(null);
   };
@@ -78,6 +109,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     signup,
     login,
     logout,
+    resetPassword,
+    sendVerificationEmail,
     error,
     clearError
   };
@@ -100,7 +133,7 @@ function getErrorMessage(error: any): string {
     case 'auth/wrong-password':
       return 'Le mot de passe est incorrect';
     case 'auth/email-already-in-use':
-      return 'Cette adresse email est déjà utilisée. Veuillez vous connecter.';
+      return 'Cette adresse email est déjà utilisée';
     case 'auth/weak-password':
       return 'Le mot de passe doit contenir au moins 6 caractères';
     case 'auth/operation-not-allowed':
@@ -109,15 +142,9 @@ function getErrorMessage(error: any): string {
       return 'Erreur de connexion. Vérifiez votre connexion internet.';
     case 'auth/too-many-requests':
       return 'Trop de tentatives. Veuillez réessayer plus tard.';
+    case 'auth/invalid-credential':
+      return 'Identifiants invalides. Veuillez vérifier votre email et mot de passe.';
     default:
       return error.message || 'Une erreur est survenue';
   }
-}
-
-export function useAuth() {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
 }
