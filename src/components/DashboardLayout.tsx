@@ -1,7 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Bot, ChevronRight } from 'lucide-react';
+import { 
+  Menu, X, Bot, ChevronRight, FileSpreadsheet, Camera, Mail,
+  Plus, Workflow, Shield, Settings
+} from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import SearchBar from './SearchBar';
 import SidebarPreview from './SidebarPreview';
@@ -16,49 +19,49 @@ const menuItems = [
     title: 'Analyse de Données',
     description: 'Automatisation des rapports',
     path: '/dashboard/analytics',
-    icon: Bot
+    icon: FileSpreadsheet
   },
   {
     id: 'vision',
     title: 'Vision par Ordinateur',
     description: 'Analyse d\'images',
     path: '/dashboard/vision',
-    icon: Bot
+    icon: Camera
   },
   {
     id: 'email',
     title: 'Automatisation Email',
     description: 'Traitement des emails',
     path: '/dashboard/email',
-    icon: Bot
+    icon: Mail
   },
   {
     id: 'tools',
     title: 'Ajouter mes outils',
     description: 'Gérer les intégrations',
     path: '/dashboard/tools',
-    icon: Bot
+    icon: Plus
   },
   {
     id: 'workflows',
     title: 'Flux de travail',
     description: 'Gérer les automatisations',
     path: '/dashboard/workflows',
-    icon: Bot
+    icon: Workflow
   },
   {
     id: 'security',
     title: 'Sécurité',
     description: 'Paramètres de sécurité',
     path: '/dashboard/security',
-    icon: Bot
+    icon: Shield
   },
   {
     id: 'settings',
     title: 'Paramètres',
     description: 'Configuration du compte',
     path: '/dashboard/settings',
-    icon: Bot
+    icon: Settings
   }
 ];
 
